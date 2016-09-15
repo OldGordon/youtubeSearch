@@ -1,4 +1,8 @@
 <<<<<<< HEAD
+
+# Curso de React Redux de Udemy de Stephen Grider
+# App para ver y buscar vídeos en YouTube
+
 # ReduxSimpleStarter
 
 Interested in learning [Redux](https://www.udemy.com/react-redux/)?

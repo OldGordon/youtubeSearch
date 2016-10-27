@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import SearchBar from './components/search_bar';
@@ -6,7 +7,7 @@ import VideoDetail from './components/video_detail';
 //import { Provider } from 'react-redux';
 //import { createStore, applyMiddleware } from 'redux';
 const API_KEY = 'AIzaSyADff_pUplGffyrNb8hvK9O9QV0P5-beuQ';
-import YTSearch from 'youtube-api-search';
+import YouTubeSearch from 'youtube-api-search';
 //import App from './components/app';
 
 //import reducers from './reducers';
@@ -21,20 +22,26 @@ class App extends Component {
       selectedVideo: null
      };
 
-    YTSearch({key: API_KEY, term:'cats'}, (videos) => {
-      this.setState({
-        videos: videos,
-        selectedVideo:videos[0]  
-       });
-      console.log(videos);
+    this.videoSearch('mallorca');
+  }
+
+  videoSearch(term){
+      YouTubeSearch({key: API_KEY, term: term}, (videos) => {
+        this.setState({
+          videos: videos,
+          selectedVideo:videos[0]
+         });
     });
   }
    render(){
+     const videoSearch= _.debounce((term) => {this.videoSearch(term)}, 300);
       return (
       <div>
-        <SearchBar />
-        <VideoDetail video={this.state.selectedVideo}/>
-        <VideoList videos={this.state.videos}/>
+        <SearchBar onSearchTermChange={videoSearch} />
+        <VideoDetail video={this.state.selectedVideo} />
+        <VideoList
+          onVideoSelect={selectedVideo => this.setState({selectedVideo}) }
+          videos={this.state.videos} />
       </div>
     );
   }
